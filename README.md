@@ -1,1 +1,2 @@
 # ProTRAIT
+This repository contains the code used for the validation of the normal tissue complication probability (NTCP) >= 2nd grade dysphagia model used for the selection of patients candidates for proton therapy in The Netherlands according to the national indication protocol for proton therapy (NIPP) (DOI: 10.14338/IJPT-20-00089.1). The dataset used for the validation of the NTCP dysphagia model is not publicly available due to patients' privacy regulations.
