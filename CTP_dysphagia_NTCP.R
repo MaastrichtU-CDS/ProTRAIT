@@ -75,8 +75,8 @@ m3 <- glm(formula_4, data = dvhdataunified, family = binomial)
 ######################produce the AUC curves for the m1 and m4#######################
 #####################################################################################
 
-roc(dysphagia_sixmonths~m0$fitted.values, data = dvhdataunified, plot = TRUE,lwd = 2, legacy.axes = FALSE, print.auc=TRUE, main = "ROC curves of the original and revised NTCP model", col= "blue")
-roc(dysphagia_sixmonths~m3$fitted.values, data = dvhdataunified, plot = TRUE,lwd = 2, add= TRUE,legacy.axes = FALSE, print.auc=TRUE, col = "red",print.auc.y=0.45)
+roc(dysphagia_sixmonths~m0$fitted.values, data = dvhdataunified, plot = TRUE,lwd = 2, legacy.axes = FALSE, print.auc=TRUE, ci=TRUE, main = "ROC curves of the original and revised NTCP model", col= "blue")
+roc(dysphagia_sixmonths~m3$fitted.values, data = dvhdataunified, plot = TRUE,lwd = 2, add= TRUE,legacy.axes = FALSE,ci=TRUE, print.auc=TRUE, col = "red",print.auc.y=0.45)
 
 
 
