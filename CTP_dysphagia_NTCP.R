@@ -26,29 +26,49 @@ library(dplyr)
 
 
 #import the dataset wwith the DVH data and toxicities
-dvhdataunified<- read_excel("path\\naldataset.xlsx")
-
-
-# I need to convert the variables I need to numeric values and create the baseline factors
-dvhdataunified$dysphagia_baseline<- ifelse(dvhdataunified$dysphagia_baseline == 0, 0,
-                                           ifelse(dvhdataunified$dysphagia_baseline == 1 , 1, 
-                                                  ifelse(dvhdataunified$dysphagia_baseline >= 2 , 1 , dvhdataunified$dysphagia_baseline)))
-
-
-dvhdataunified$dysphagia_baseline<- as.double(dvhdataunified$dysphagia_baseline)
-dvhdataunified$`Dmean_mondholte_(Gy)`<-as.double(dvhdataunified$`Dmean_mondholte_(Gy)`)
-dvhdataunified$`Dmean_PCM_superior_(Gy)`<-as.double(dvhdataunified$`Dmean_PCM_superior_(Gy)`)
+dvhdataunifiednew<- read_excel("path\\naldataset.xlsx")
 
 
 
+dvhdataunifiednew$dysphagia_baseline<-ifelse(dvhdataunifiednew$dysphagia_baseline <=1, 0,
+                                         ifelse(dvhdataunifiednew$dysphagia_baseline == 2 , 0.9382,
+                                                ifelse(dvhdataunifiednew$dysphagia_baseline >= 3 , 1.2900 , dvhdataunifiednew$dysphagia_baseline)))
 
 
 
-dvhdataunified$linear_factors <- -3.303+(0.024*(dvhdataunified$`Dmean_mondholte_(Gy)`))+
-  (0.024*(dvhdataunified$`Dmean_PCM_superior_(Gy)`))+
-  (0.0967*(dvhdataunified$dysphagia_baseline))
+dvhdataunifiednew$Tumorlokatie <-ifelse(dvhdataunifiednew$Tumorlokatie  == "mondholte", 0,
+                                   ifelse(dvhdataunifiednew$Tumorlokatie == "farynxtumor" , -0.6281,
+                                          ifelse(dvhdataunifiednew$Tumorlokatie == "larynxtumor" , -0.7711 ,dvhdataunifiednew$Tumorlokatie)))
 
-dvhdataunified$dysphagia_sixmonths<- ifelse(dvhdataunified$dysphagia_sixmonths >= 2, 1, 0)
+
+
+
+dvhdataunifiednew$dysphagia_baseline<-as.double(dvhdataunifiednew$dysphagia_baseline)
+dvhdataunifiednew$Tumorlokatie<-as.double(dvhdataunifiednew$Tumorlokatie)
+dvhdataunifiednew$`Dmean_PCM_inferior_(Gy)`<-as.double(dvhdataunifiednew$`Dmean_PCM_inferior_(Gy)`)
+dvhdataunifiednew$`Dmean_PCM_superior_(Gy)`<-as.double(dvhdataunifiednew$`Dmean_PCM_superior_(Gy)`)
+dvhdataunifiednew$`Dmean_PCM_medius_(Gy)`<-as.double(dvhdataunifiednew$`Dmean_PCM_medius_(Gy)`)
+dvhdataunifiednew$`Dmean_mondholte_(Gy)`<-as.double(dvhdataunifiednew$`Dmean_mondholte_(Gy)`)
+
+
+
+
+#lets calculate the linear predictor for the NTCP model LIPP2 for dypshagia more than 2nd grade 6 months
+
+#lets calculate the linear predictor for the NTCP model LIPP2 for dypshagia more than 2nd grade 6 months
+dvhdataunifiednew$linear_factor <- (-4.0536
+                                       +0.030*(dvhdataunifiednew$`Dmean_mondholte_(Gy)`)
+                                       +0.0236*(dvhdataunifiednew$`Dmean_PCM_superior_(Gy)`)
+                                       +0.0095*(dvhdataunifiednew$`Dmean_PCM_medius_(Gy)`)
+                                       +0.0133*(dvhdataunifiednew$`Dmean_PCM_inferior_(Gy)`)
+                                       +offset(dvhdataunifiednew$dysphagia_baseline)
+                                       +offset(dvhdataunifiednew$Tumorlokatie))
+
+
+#convert the numeric values to character that will be transformed to a factor
+table(dvhdataunifiednew$dysphagia_sixmonths)
+dvhdataunifiednew$dysphagia_sixmonths<- ifelse(dvhdataunifiednew$dysphagia_sixmonths >=2,1, 0)
+
 
 #####################################################################################
 ######################create the four different models of the CTP####################
