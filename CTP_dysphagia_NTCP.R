@@ -99,6 +99,15 @@ roc(dysphagia_sixmonths~m0$fitted.values, data = dvhdataunified, plot = TRUE,lwd
 roc(dysphagia_sixmonths~m3$fitted.values, data = dvhdataunified, plot = TRUE,lwd = 2, add= TRUE,legacy.axes = FALSE,ci=TRUE, print.auc=TRUE, col = "red",print.auc.y=0.45)
 
 
+#####################################################################################
+######################Hosmer–Lemeshow test###########################################
+#####################################################################################
+
+library(ResourceSelection)
+hl <- hoslem.test(m1$y, fitted(m1), g=10)
+hl <- hoslem.test(m2$y, fitted(m2), g=10)
+hl <- hoslem.test(m3$y, fitted(m3), g=10)
+hl <- hoslem.test(m4_valid$y, fitted(m4_valid), g=10)
 
 
 #####################################################################################
